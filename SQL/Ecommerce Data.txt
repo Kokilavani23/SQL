@@ -1,0 +1,166 @@
+CREATE DATABASE ECOMMERCE_DATA;
+USE ECOMMERCE_DATA;
+
+CREATE TABLE SellerDetails (
+    seller_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    phone_number VARCHAR(15) UNIQUE,
+    city VARCHAR(50),
+    country VARCHAR(50)
+);
+
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    cost_price INT,
+    stocks_available INT,
+    damaged_quantity INT,
+    seller_id INT,
+    FOREIGN KEY (seller_id) REFERENCES SellerDetails(seller_id)
+);
+
+CREATE TABLE OrderDetails (
+    orderID INT,
+    product_id INT,
+    customer_id INT,
+    orderDate DATE,
+    discount INT,
+    sellingPrice DECIMAL(10, 2),
+    deliveryDate DATE,
+    PRIMARY KEY (orderID),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+CREATE TABLE Customers (
+    customer_id INT,
+	orderID INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    phone_number VARCHAR(50) UNIQUE,
+    city VARCHAR(50),
+    country VARCHAR(50),
+    required_date DATE,
+    PRIMARY KEY (customer_id),
+	FOREIGN KEY (orderID) REFERENCES OrderDetails(orderID)
+);
+
+CREATE TABLE shippingDetails (
+    shipping_id BIGINT,
+	orderID INT,
+	shipping_mode VARCHAR(50),
+    vehicle_number VARCHAR(50),
+    dpName VARCHAR(50),
+    dpContact VARCHAR(50),
+    shipping_date DATE,
+    PRIMARY KEY (shipping_id),
+    FOREIGN KEY (orderID) REFERENCES OrderDetails(orderID)
+);
+
+CREATE TABLE Payments (
+    payment_id BIGINT,
+	orderID INT,
+    payment_status VARCHAR (50),
+	payment_mode VARCHAR(50),
+    payment_date DATE,
+    PRIMARY KEY (payment_id),
+    FOREIGN KEY (orderID) REFERENCES OrderDetails(orderID)
+);
+
+
+INSERT INTO SellerDetails (seller_id, first_name, last_name, email, phone_number, city, country)
+VALUES
+(1, 'Alice', 'Brown', 'alice.brown@example.com', '1234567890', 'New York', 'USA'),
+(2, 'Bob', 'Jones', 'bob.jones@example.com', '0987654321', 'London', 'UK'),
+(3, 'Chloe', 'Smith', 'chloe.smith@example.com', '1122334455', 'Paris', 'France'),
+(4, 'David', 'Taylor', 'david.taylor@example.com', '2233445566', 'Berlin', 'Germany'),
+(5, 'Emma', 'Wilson', 'emma.wilson@example.com', '3344556677', 'Tokyo', 'Japan'),
+(6, 'Frank', 'Miller', 'frank.miller@example.com', '4455667788', 'Toronto', 'Canada'),
+(7, 'Grace', 'Davis', 'grace.davis@example.com', '5566778899', 'Sydney', 'Australia'),
+(8, 'Hassan', 'Ali', 'hassan.ali@example.com', '6677889900', 'Cairo', 'Egypt'),
+(9, 'Isabella', 'Garcia', 'isabella.garcia@example.com', '7788990011', 'Madrid', 'Spain'),
+(10, 'Jorge', 'Rodriguez', 'jorge.rodriguez@example.com', '8899001122', 'Mexico City', 'Mexico');
+
+INSERT INTO Products (product_id, product_name, category, cost_price, stocks_available, damaged_quantity, seller_id)
+VALUES
+(42139867, 'Smartphone', 'Electronics', 30000, 554, 20, 1),
+(19672384, 'Laptop', 'Electronics', 70000, 800, 169, 2),
+(25398146, 'Refrigerator', 'Appliances', 25000, 202, 56, 3),
+(98654321, 'Microwave Oven', 'Appliances', 8000, 407, 14, 4),
+(13821759, 'LED TV', 'Electronics', 60000, 697, 39, 5),
+(65483719, 'Washing Machine', 'Appliances', 35000, 275, 102, 6),
+(46327854, 'Headphones', 'Electronics', 5000, 109, 5, 7),
+(98213796, 'Blender', 'Appliances', 800, 60, 4, 8),
+(72659418, 'Camera', 'Electronics', 5000, 10, 2, 9),
+(93542167, 'Vacuum Cleaner', 'Appliances', 2000, 35, 4, 10);
+
+INSERT INTO OrderDetails (orderID, product_id, customer_id, orderDate, discount, sellingPrice, deliveryDate)
+VALUES
+(8492, 42139867, 854239, '2024-12-12', 5, 28500, '2024-12-15'),
+(2178, 19672384, 219874, '2024-04-19', 15, 59500, '2024-04-22'),
+(4632, 25398146, 463728, '2024-09-15', 5, 23750, '2024-09-19'),
+(9851, 98654321, 982531, '2023-10-18', 80, 1600, '2023-10-24'),
+(1389, 13821759, 118423, '2020-07-07', 35, 39000, '2020-07-17'),
+(6274, 65483719, 657834, '2021-06-20', 60, 14000, '2021-06-26'),
+(7521, 46327854, 275639, '2022-09-26', 50, 2500, '2022-09-29'),
+(3947, 98213796, 935217, '2023-08-20', 20, 640, '2023-08-21'),
+(2186, 72659418, 742195, '2022-08-11', 25, 3750, '2022-08-21'),
+(9357, 93542167, 528463, '2020-09-15', 10, 1800, '2020-09-17');
+
+INSERT INTO Customers (customer_id, orderID, first_name, last_name, email, phone_number, city, country, required_date)
+VALUES 
+(854239,8492,'Ava', 'Morris','ava.morris@gmail.com','+1 212-543-8192','New York', 'USA','2020-07-16'),
+(219874,2178,'Ethan', 'Hanson','ehanson@yahoo.com','+44 207 654 3219','London', 'United Kingdom','2024-04-21'),
+(463728,4632,'Lily', 'Singh','lily.singh@hotmail.com','+33 6 47 88 12 34','Paris', 'France','2022-08-19'),
+(982531,9851,'Noah', 'Russell','noahrussell123@aol.com','+49 30 8765 4321','Berlin', 'Germany','2023-08-19'),
+(118423,1389,'Sophia', 'Garcia','sophia.garcia95@gmail.com','+81 90-9876-5432','Tokyo', 'Japan','2024-09-18'),
+(657834,6274,'Julia', 'Martinez','jmartinez@outlook.com','+1 416-234-5678','Toronto', 'Canada','2021-06-25'),
+(275639,7521,'Benjamin', 'Brooks','benbrooks88@gmail.com','+61 412 345 678','Sydney', 'Australia','2022-09-27'),
+(935217,3947,'Charlotte', 'Hall','charhall@gmail.com','+20 122 456 7890','Cairo', 'Egypt','2024-12-14'),
+(742195,2186,'Alexander', 'Kim','alex.kim@icloud.com','+34 91 234 56 78','Madrid', 'Spain','2020-09-16'),
+(528463,9357,'Isabella', 'Jackson','isabella.jackson@gmail.com','+52 55 8765 4321','Mexico City', 'Mexico','2023-10-22');
+
+INSERT INTO shippingDetails (shipping_id,orderID,shipping_mode,vehicle_number,dpName,dpContact,shipping_date)
+VALUES 
+(98452713857,8492,'Truck','LMK-4212','JAMES','+1 212-876-5432','2020-07-16'),
+(75321946713,2178,'Bike','LMK-4212','JOHN','+44 20 7123 4567','2024-04-21'),
+(42986375182,4632,'Plane','','SMITH', '+33 6 78 91 23 45','2022-08-19'),
+(91746329845,9851,'Truck','B-BE 1234','CARTER','+ 49 30 1234 5678','2023-08-20'),
+(13857462981,1389,'Bike','33-011-543','HARRY',' +81 90 1234 5678','2024-09-18'),
+(65748392015,6274,'Plane','','PETER','+1 416 987 6543','2021-06-25'),
+(85219346759,7521,'Truck','GBJ-421','ROBERT','+61 4 1234 5678','2022-09-28'),
+(46378923401,3947,'Bike','9999-ETA','PEPPER','+20 122 345 6789','2024-12-14'),
+(27539846182,2186,'Plane','','HAPPY','+34 91 234 56 78','2020-09-16'),
+(93574321987,9357,'Truck','MEX-8-1234','EDDY','+52 55 1234 5678','2023-10-23');
+
+INSERT INTO Payments (payment_id, orderID, payment_status, payment_mode, payment_date)
+VALUES 
+(984527138579,8492,'Completed','COD', '2024-12-15' ),
+(753219467138,2178,'Pending','Credit Card', '2024-04-19' ),
+(429863751824,4632,'Completed','Credit Card', '2024-09-15' ),
+(917463298457,9851,'Completed','Debit Card', '2023-10-24' ),
+(138574629812,1389,'Pending','Debit Card', '2020-07-17' ),
+(657483920157,6274,'Pending','Credit Card', '2021-06-20' ),
+(852193467593,7521,'Completed','Debit Card', '2022-09-29' ),
+(463789234019,3947,'Completed','Debit Card', '2023-08-21' ),
+(275398461823,2186,'Completed','Credit Card', '2022-08-11' ),
+(935743219876,9357,'Completed','COD', '2020-09-17' );
+
+SELECT * FROM sellerDetails s
+JOIN products pr on pr.seller_id = s.seller_id
+JOIN orderDetails od on od.product_id = pr.product_id
+JOIN customers c on c.orderID = od.orderID
+JOIN shippingdetails sd on sd.orderID = od.orderID
+JOIN payments p on p.orderID = od.orderID;
+
+
+SELECT s.seller_id,s.first_name seller_first_name,s.last_name AS seller_last_name,
+    ( SELECT COUNT(*) FROM OrderDetails od JOIN Products p ON od.product_id = p.product_id
+    WHERE p.seller_id = s.seller_id
+    ) AS total_orders FROM SellerDetails s
+WHERE (SELECT COUNT(*) FROM OrderDetails od JOIN Products p ON od.product_id = p.product_id
+WHERE p.seller_id = s.seller_id
+) > 0;
