@@ -36,4 +36,4 @@ This project provides a structured SQL database for an e-commerce platform. It i
    
 ### **Technologies Used**
 - SQL
-- MySQL or any compatible relational database management system (RDBMS
+- MySQL or any compatible relational database management system (RDBMS)
